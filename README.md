@@ -112,3 +112,8 @@ Future<void> submit2() async {
 
 
 Capturi ecran aplicație:
+![image](https://github.com/DorobantuAndrei/proiectCloud/assets/84039610/75427cd4-00b3-440c-a9c5-6cfdc0b12f18)
+![image](https://github.com/DorobantuAndrei/proiectCloud/assets/84039610/34892ea0-c764-4a47-802c-6e8d8689f791)
+![image](https://github.com/DorobantuAndrei/proiectCloud/assets/84039610/1f1a111b-87b3-4dea-9694-dcdd1fcb0942)
+![image](https://github.com/DorobantuAndrei/proiectCloud/assets/84039610/754e83e4-aae6-45e7-915c-1350db241fef)
+![image](https://github.com/DorobantuAndrei/proiectCloud/assets/84039610/fd52c4d1-e2e6-4d21-bbf0-da7f30785e60)

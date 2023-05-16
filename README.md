@@ -1,17 +1,114 @@
-# achizitii_cereale
+Proiect Cloud - Achizitii Cereale
+Dorobantu Andrei-Denis
+Grupa: 1119, Simpre
 
-A new Flutter project.
+Link catre videoclip:https://youtu.be/ychbDvUvcTg
 
-## Getting Started
+Link publicare:https://proiectcloud-3d8e9.firebaseapp.com/#/
 
-This project is a starting point for a Flutter application.
+Descriere problemă:
 
-A few resources to get you started if this is your first Flutter project:
+Aplicația este o platformă de gestionare a tranzacțiilor între clienți și furnizori în domeniul agricol. Scopul său principal este de a facilita procesul de înregistrare a contractelor cu furnizorii și de a urmări tranzacțiile de cereale între aceștia și clienți.
+Caracteristicile și funcționalitățile cheie ale aplicației includ:
+    Gestionarea furnizorilor: Utilizatorul pot adăuga și gestiona detalii despre furnizori, inclusiv informații despre companie, persoane de contact și date de contact. Aceasta permite o colaborare ușoară cu furnizorii agricoli.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+    Gestionarea clienților: Aplicația permite administrarea detaliilor despre clienți, inclusiv informații despre companie, persoane de contact și date de contact. Astfel, utilizatorii pot menține o bază de date actualizată a clienților lor agricoli.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# AchizitiiCereale
+    Adăugarea contractelor: Utilizatorul pot crea și gestiona contracte cu furnizorii pentru a stabili detalii specifice ale tranzacțiilor, cum ar fi tipul de cereale, cantitatea, prețul și termenul de livrare.
+
+O astfel de aplicatie rezolva gestionarea tranzactiilor pentru un patron de terenuri ce se ocupa constant de achizitionarea de noi
+bunuri(multiple tipuri de cereale). Utilizatorul aplicatiei beneficiaza astfel de o impartire gestionata a produselor sale, separare intre partea de clienti, furnizori si cereale.
+
+Descriere API:
+Pentru baza de date am folosit FireBase. Am integrat in aplicatie un pachet care integreaza firebase api. Am ales FireBase datorita costurilor inexistente in cazul unei aplicatii cu un numar redus de utilizatori
+
+Pentru validarea numarului de telefon am folosit ApiStack, un provider de servicii care ofera si generare de One Time Password printr-un request ce contine numarul de telefon al utilizatorului. Aceasta validare este esentiala din motive de securitate, pentru a limita accesul altor utilizatori. 
+
+
+Flux de date:
+Exemplu de send request catre ApiStack:
+
+Future<void> submit() async {
+    if (!validateForm()) {
+      return;
+    }
+
+    print('start');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'x-as-apikey': 'a61ef09b-fe42-4a12-ae57-b00bb1f087d9',
+    };
+
+    Map body = {
+      "messageFormat":
+          "Hello, this is your OTP. Please do not share it with anyone",
+      "phoneNumber": telefonController.text,
+      "otpLength": 6,
+      "otpValidityInSeconds": 240,
+    };
+
+    HttpClient client = HttpClient();
+    String serverUrl = 'www.getapistack.com';
+
+    try {
+      Map response = await client.post(
+          Uri.https(serverUrl, '/api/v1/otp/send'), body, headers);
+      setState(() {
+        requestId = response['data']['data']['requestId'];
+        hasSend = true;
+        hasError = false;
+      });
+    } catch (e) {
+      print(e.toString());
+      print('hellooo');
+      setState(() {
+        hasSend = false;
+        requestId = null;
+        hasError = true;
+      });
+    }
+}
+
+
+Exemplu de validare request:
+Future<void> submit2() async {
+    if (!validateForm()) {
+      return;
+    }
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'x-as-apikey': 'a61ef09b-fe42-4a12-ae57-b00bb1f087d9',
+    };
+
+    Map body = {
+      "otp": codSmsController.text,
+      "requestId": requestId,
+    };
+
+    HttpClient client = HttpClient();
+    String serverUrl = 'www.getapistack.com';
+
+    try {
+      Map response = await client.post(
+          Uri.https(serverUrl, '/api/v1/otp/verify'), body, headers);
+      setState(() {
+        isOk = response['data']['data']['isOtpValid'];
+
+        if (isOk) {
+          hasError = false;
+          widget.change();
+        }
+      });
+    } catch (e) {
+      setState(() {
+        isOk = false;
+        hasError = true;
+      });
+      print(e.toString());
+    }
+  }
+
+
+Capturi ecran aplicație:
